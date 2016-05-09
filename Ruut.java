@@ -10,8 +10,10 @@ import javafx.scene.text.Text;
 public class Ruut extends StackPane{
 	int nr;
 	Text märk = new Text("");
+
 	
 	public Ruut(int laius,int kõrgus,int nr){
+
 		this.nr = nr;
 		Rectangle piir = new Rectangle(laius, kõrgus);
         piir.setFill(null);

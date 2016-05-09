@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -17,6 +18,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -24,11 +27,18 @@ public class Mäng extends Application {
 	int pildilaius = 600;
 	int pildikõrgus = 600;
 	static boolean onO = new Boolean(null); // alustab O;
+
 	
 	static void setO(boolean state){ // muudame mängija ära
 		onO = !state;
 	}
 	
+	static void alustaUut(List<Ruut> ruudulist){
+		Tabel.puhasta();
+		for (int k = 0; k < 9; k++) {
+			ruudulist.get(k).puhasta();
+		}
+	}
 	public void start(Stage peaLava) throws Exception {
 		Group juur = new Group();
 		List<Ruut> ruudud = new ArrayList<Ruut>(); // et ruudud saaks tühjaks teha kui mäng uuesti algab
@@ -61,7 +71,7 @@ public class Mäng extends Application {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Trips-Traps-Trull");
 		alert.setHeaderText(null); // et aken ilusam oleks
-		alert.setContentText("Kas soovid alustada uut mängu või jätkata eelmise seisuga?");
+		alert.setContentText("Tere tulemast mängima trips-traps-trulli! Mängitakse kordamööda ja mänguvälja saab puhtaks teha nupuga F1. Kas soovid alustada uut mängu või jätkata eelmise seisuga?");
 		ButtonType uus = new ButtonType("Uus mäng");
 		ButtonType vana = new ButtonType("Jätka vanaga");
 		ButtonType välju = new ButtonType("Välju mängust", ButtonData.CANCEL_CLOSE);
@@ -104,9 +114,29 @@ public class Mäng extends Application {
 				ruut.setLayoutY(i*200);
 				ruudud.add(ruut);
 				juur.getChildren().add(ruut);
-	
+				
+				juur.setOnKeyPressed(new EventHandler<KeyEvent>(){
+					
+					public void handle(KeyEvent ke){
+						if (ke.getCode() == KeyCode.F1){ // alusta uut mängu
+							alustaUut(ruudud);
+						}
+					}
+				});
 				ruut.setOnMouseClicked(new EventHandler<MouseEvent>(){
 					public void handle(MouseEvent me){
+						//Tabel.näitaTabelit();
+						if(Tabel.kontrolliViiki()){
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("Viik!");
+							alert.setHeaderText(null);
+							alert.setContentText("Seis: X - " + Integer.toString(skoor.get("x")) + "; O - "+Integer.toString(skoor.get("o")) );
+							alert.showAndWait();
+							alustaUut(ruudud);
+
+
+
+						}
 						if(onO){
 							if(ruut.vaba()){
 								Tabel.kirjutaTabelisse(Integer.toString(ruut.getNr()+1), "o");
@@ -139,14 +169,12 @@ public class Mäng extends Application {
 									alert.showAndWait();
 									
 									// puhastame tabeli ja teeme ruudud tühjaks uue mängu jaoks
-									Tabel.puhasta();
-									for (int k = 0; k < 9; k++) {
-										ruudud.get(k).puhasta();
-									}
+									alustaUut(ruudud);
 									peaLava.setTitle("Mänguseis: Mängija X: "+Integer.toString(skoor.get("x"))+ ", Mängija O: "+Integer.toString(skoor.get("o")));
 								}
 							}
 							else{
+
 								peaLava.setTitle("Vali tühi ruut!");
 							}					
 						}
@@ -181,14 +209,12 @@ public class Mäng extends Application {
 									alert.showAndWait();
 									
 									// puhastame tabeli ja teeme ruudud tühjaks uue mängu jaoks
-									Tabel.puhasta();
-									for (int k = 0; k < 9; k++) {
-										ruudud.get(k).puhasta();
-									}
+									alustaUut(ruudud);
 									peaLava.setTitle("Mänguseis: Mängija X: "+Integer.toString(skoor.get("x"))+ ", Mängija O: "+Integer.toString(skoor.get("o")));
 								}
 							}
 							else{
+		
 								peaLava.setTitle("Vali tühi ruut!");
 							}
 						}	
@@ -201,6 +227,7 @@ public class Mäng extends Application {
         peaLava.setScene(stseen1);
         peaLava.setResizable(false);
         peaLava.show();
+        juur.requestFocus(); // küsime juure jaoks "fookust" - võimaldab keyeventi tööle saada (ilma fookuseta ei toimi)
 	}
 
 	public static void main(String[] args) {

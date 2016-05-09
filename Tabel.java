@@ -57,7 +57,19 @@ public class Tabel {
 			return false;
 		}
      }
-
+	public static boolean kontrolliViiki(){
+		int vabukohti = 9;
+		
+		for(String elem : tabel){
+			if(elem.equals("o") || elem.equals("x")){
+				vabukohti -= 1;
+			}else{
+				return false;
+			}
+		}
+			
+		return vabukohti == 0? true : false;
+	}
 	public static void puhasta(){
 		for (int i = 0; i < tabel.length; i++) {
 			tabel[i]=Integer.toString(i+1);			
