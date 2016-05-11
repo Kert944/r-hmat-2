@@ -126,17 +126,7 @@ public class Mäng extends Application {
 				ruut.setOnMouseClicked(new EventHandler<MouseEvent>(){
 					public void handle(MouseEvent me){
 						//Tabel.näitaTabelit();
-						if(Tabel.kontrolliViiki()){
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("Viik!");
-							alert.setHeaderText(null);
-							alert.setContentText("Seis: X - " + Integer.toString(skoor.get("x")) + "; O - "+Integer.toString(skoor.get("o")) );
-							alert.showAndWait();
-							alustaUut(ruudud);
-
-
-
-						}
+					
 						if(onO){
 							if(ruut.vaba()){
 								Tabel.kirjutaTabelisse(Integer.toString(ruut.getNr()+1), "o");
@@ -172,7 +162,21 @@ public class Mäng extends Application {
 									alustaUut(ruudud);
 									peaLava.setTitle("Mänguseis: Mängija X: "+Integer.toString(skoor.get("x"))+ ", Mängija O: "+Integer.toString(skoor.get("o")));
 								}
+								else if(Tabel.kontrolliViiki()){
+									
+									Alert alert = new Alert(AlertType.INFORMATION);
+									alert.setTitle("Viik!");
+									alert.setHeaderText(null);
+									alert.setContentText("Seis: X - " + Integer.toString(skoor.get("x")) + "; O - "+Integer.toString(skoor.get("o")) );
+									alert.showAndWait();
+									
+									// puhastame tabeli ja teeme ruudud tühjaks uue mängu jaoks
+									alustaUut(ruudud);
+									peaLava.setTitle("Mänguseis: Mängija X: "+Integer.toString(skoor.get("x"))+ ", Mängija O: "+Integer.toString(skoor.get("o")));
+
+								}
 							}
+							
 							else{
 
 								peaLava.setTitle("Vali tühi ruut!");
@@ -212,7 +216,21 @@ public class Mäng extends Application {
 									alustaUut(ruudud);
 									peaLava.setTitle("Mänguseis: Mängija X: "+Integer.toString(skoor.get("x"))+ ", Mängija O: "+Integer.toString(skoor.get("o")));
 								}
+								else if(Tabel.kontrolliViiki()){
+									
+									Alert alert = new Alert(AlertType.INFORMATION);
+									alert.setTitle("Viik!");
+									alert.setHeaderText(null);
+									alert.setContentText("Seis: X - " + Integer.toString(skoor.get("x")) + "; O - "+Integer.toString(skoor.get("o")) );
+									alert.showAndWait();
+									
+									// puhastame tabeli ja teeme ruudud tühjaks uue mängu jaoks
+									alustaUut(ruudud);
+									peaLava.setTitle("Mänguseis: Mängija X: "+Integer.toString(skoor.get("x"))+ ", Mängija O: "+Integer.toString(skoor.get("o")));
+
+								}
 							}
+							
 							else{
 		
 								peaLava.setTitle("Vali tühi ruut!");
